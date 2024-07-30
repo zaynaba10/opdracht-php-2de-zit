@@ -10,4 +10,13 @@ try {
 } catch (PDOException $e) {
     die("Could not connect to the database $db :" . $e->getMessage());
 }
+
+
+function debug_to_console($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('Debug Objects: " . $output . "' );</script>";
+}
 ?>

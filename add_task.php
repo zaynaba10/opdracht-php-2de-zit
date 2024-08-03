@@ -5,16 +5,16 @@ require 'models/Task.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $list_id = $_POST['list_id'];
-    $title = $_POST['title'];
+    $name = $_POST['task_name'];
     $deadline = $_POST['deadline'];
 
     try {
-        Task::create($pdo, $list_id, $title, $deadline);
-        header('Location: index.php');
+        Task::create($pdo, $list_id, $name, $deadline);
+        header('Location: app.php');
         exit();
     } catch (Exception $e) {
         $_SESSION['error'] = $e->getMessage();
-        header('Location: index.php');
+        header('Location: app.php');
         exit();
     }
 }

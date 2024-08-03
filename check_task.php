@@ -2,16 +2,28 @@
 require 'config/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'];
-    $is_done = isset($_POST['is_done']) ? (int)$_POST['is_done'] : 0;
+    // clean and convert POST data
+    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
     try {
-        $stmt = $pdo->prepare('UPDATE tasks SET is_done = :is_done WHERE id = :id');
+        // get task status
+        $checkStmt = $pdo->prepare('SELECT is_done FROM tasks WHERE id = :id');
+        $checkStmt->execute(['id' => $id]);
+        $task = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
-        $stmt->execute(['is_done' => $is_done, 'id' => $id]);
-        echo $is_done;
+        if ($task) {
+            // invert value of is done
+            $is_done = $task['is_done'] == 1 ? 0 : 1;
+
+            // update met reversed balue
+            $stmt = $pdo->prepare('UPDATE tasks SET is_done = :is_done WHERE id = :id');
+            $stmt->execute(['is_done' => $is_done, 'id' => $id]);
+
+        } else {
+            $_SESSION['error'] = "Task with ID $id does not exist.";
+        }
     } catch (Exception $e) {
-        echo 'error';
+        $_SESSION['error'] = $e->getMessage();
     }
 }
 ?>

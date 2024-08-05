@@ -1,39 +1,45 @@
 <?php
 
-class User {
+class User
+{
     private $id;
     private $username;
-    private $password;
-    private $email;
+    private $password_hash;
     private $created_at;
 
-    // Getters and Setters
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
-    public function setUsername($username) {
+    public function setUsername($username)
+    {
         $this->username = $username;
     }
 
-    public function getPassword() {
-        return $this->password;
+    public function getPasswordHash()
+    {
+        return $this->password_hash;
     }
 
-    public function setPassword($password) {
-        $this->password = password_hash($password, PASSWORD_BCRYPT);
+    public function setPassword($password)
+    {
+        $this->password_hash = password_hash($password, PASSWORD_BCRYPT);
     }
 
-
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
 
-    public static function register($pdo, $username, $password, $confirm_password) {
+
+    public static function register($pdo, $username, $password, $confirm_password)
+    {
         if (empty($username) || empty($password) || empty($confirm_password)) {
             throw new Exception('Please fill in all fields.');
         }
@@ -48,7 +54,6 @@ class User {
             throw new Exception('Username already taken.');
         }
 
-        // Hash the password
         $password_hash = password_hash($password, PASSWORD_BCRYPT);
 
         $stmt = $pdo->prepare('INSERT INTO users (username, password_hash) VALUES (:username, :password_hash)');
@@ -59,31 +64,25 @@ class User {
         return true;
     }
 
-    public static function login($pdo, $username, $password) {
-    if (empty($username) || empty($password)) {
-        throw new Exception('Please fill in all fields.');
+    public static function login($pdo, $username, $password)
+    {
+        $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE username = :username');
+        $stmt->execute(['username' => $username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($password, $user['password_hash'])) {
+            return $user['id'];
+        } else {
+            throw new Exception('Invalid username or password.');
+        }
     }
 
-    // Retrieve the user data from the database
-    $stmt = $pdo->prepare('SELECT id, username, password_hash FROM users WHERE username = :username');
-    $stmt->execute(['username' => $username]);
-    $user = $stmt->fetch();
-
-    if ($user && password_verify($password, $user['password_hash'])) {
-        // Set user session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        return true;
-    } else {
-        throw new Exception('Invalid username or password.');
-    }
-    }
-
-    // Constructor
-    public function __construct($username = null, $password = null, $email = null) {
+    public function __construct($username = null, $password = null)
+    {
         $this->setUsername($username);
-        $this->setPassword($password);
-        $this->setEmail($email);
+        if ($password) {
+            $this->setPassword($password);
+        }
     }
 }
 ?>

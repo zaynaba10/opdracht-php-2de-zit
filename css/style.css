@@ -14,7 +14,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .logo img {
@@ -51,6 +51,7 @@ body {
     margin: 0 auto;
     padding: 10px;
     border-radius: 5px;
+    margin-bottom: 20px;
 }
 
 .add-section input {
@@ -123,7 +124,7 @@ body {
     padding: 5px 0;
     font-size: 17px;
     font-family: sans-serif;
-    color: #555;
+    color: #1955c5;
 }
 
 .todo-item small {
@@ -136,33 +137,8 @@ body {
     font-family: sans-serif;
 }
 
-.remove-to-do {
-    display: block;
-    float: right;
-    width: 20px;
-    height: 20px;
-    font-family: sans-serif;
-    color: rgb(139, 97, 93);
-    text-decoration: none;
-    text-align: right;
-    padding: 0 5px 8px 0;
-    border-radius: 50%;
-    transition: background 1s;
-    cursor: pointer;
-}
-
-.remove-to-do:hover {
-    background: rgb(139, 97, 93);
-    color: #fff;
-}
-
-.checked {
-    color: #999 !important;
-    text-decoration: line-through;
-}
-
 .todo-item input {
-    margin: 0 5px;
+    margin: 0 20px;
 }
 
 .empty {
@@ -170,4 +146,81 @@ body {
     font-size: 16px;
     text-align: center;
     color: #cccc;
+}
+
+.task-list-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.task-items {
+    margin-top: 15px;
+}
+
+.task-item {
+    font-size: 13px;
+    margin: 10px;
+}
+
+.task-text {
+    flex: 1;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.task-completed {
+    text-decoration: line-through;
+    color: #717175;
+    font-size: 20px;
+}
+
+.task-not-completed {
+    color: #484ad3;
+    font-size: 20px;
+}
+
+.empty {
+    color: #9c9c9c;
+    font-style: italic;
+}
+
+.comment-section {
+    margin-bottom: 10px;
+}
+
+.comment-form-group {
+    display: flex;
+    align-items: center;
+}
+
+.comment-input {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.comment-submit {
+    white-space: nowrap;
+}
+
+.task-item .delete-btn-wrapper {
+    margin-left: 10px;
+}
+
+.task-item small {
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.sort-section {
+text-align: center;
+/* Center the buttons */
+}
+
+.sort-section a {
+margin: 0 5px;
+/* Add some space between buttons */
 }

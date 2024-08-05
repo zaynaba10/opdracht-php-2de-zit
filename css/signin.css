@@ -1,18 +1,18 @@
    body {
-       padding: 40px 0;
+       padding: 20px 0;
        background: radial-gradient(circle, #484ad3 0%, rgba(96, 27, 159, 1) 100%);
        font-family: 'Roboto', sans-serif;
    }
 
 .form-signin {
     max-width: 330px;
-    padding: 15px;
+    padding: 10px;
     margin: 0 auto;
 }
 
 .form-signin .form-signin-heading,
 .form-signin .checkbox {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .form-signin .checkbox {
@@ -22,7 +22,7 @@
 .logo-heading {
     color: aliceblue;
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
 }
@@ -61,11 +61,10 @@
 display: flex;
 justify-content: center;
 align-items: center;
-margin-bottom: 20px;
+margin-bottom: 15px;
 }
 
 .logo img {
-width: 100px;
-height: 100px;
+width: 90px;
 }
     

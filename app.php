@@ -1,31 +1,7 @@
 <?php
 session_start();
 require 'config/config.php';
-
-$sortOrder = 'ASC';
-$sortType = 'name';
-
-if (isset($_GET['sort']) && in_array($_GET['sort'], ['ascending', 'descending'])) {
-    $sortOrder = $_GET['sort'] == 'ascending' ? 'ASC' : 'DESC';
-}
-
-if (isset($_GET['type']) && in_array($_GET['type'], ['name', 'deadline'])) {
-    $sortType = $_GET['type'];
-}
-
-$listsQuery = $pdo->prepare("SELECT * FROM tasks ORDER BY $sortType $sortOrder");
-$listsQuery->execute();
-
-$taskSortOrder = 'ASC';
-$taskSortType = 'deadline';
-
-if (isset($_GET['sort']) && in_array($_GET['sort'], ['ascending', 'descending'])) {
-    $taskSortOrder = $_GET['sort'] == 'ascending' ? 'ASC' : 'DESC';
-}
-
-if (isset($_GET['type']) && in_array($_GET['type'], ['name', 'deadline'])) {
-    $taskSortType = $_GET['type'];
-}
+require './sort.php';
 
 ?>
 <!DOCTYPE html>
@@ -219,9 +195,15 @@ if (isset($_GET['type']) && in_array($_GET['type'], ['name', 'deadline'])) {
             // Submit comment via AJAX
             $('.comment-form').submit(function (e) {
                 e.preventDefault();
+
                 const form = $(this);
                 const task_id = form.find('input[name="task_id"]').val();
-                const comment = form.find('input[name="comment"]').val();
+                const comment = form.find('input[name="comment"]').val().trim();
+
+                if (comment === '') {
+                    alert('Comment cannot be empty.');
+                    return;
+                }
 
                 $.post('add_comment.php', { task_id: task_id, comment: comment }, function (response) {
                     if (response.startsWith('error')) {
@@ -235,6 +217,7 @@ if (isset($_GET['type']) && in_array($_GET['type'], ['name', 'deadline'])) {
                     }
                 });
             });
+
         });
     </script>
 </body>

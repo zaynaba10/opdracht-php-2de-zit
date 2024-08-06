@@ -11,13 +11,30 @@ try {
     die("Could not connect to the database $db :" . $e->getMessage());
 }
 
-//function to output in chrome debug
-function debugclg($data, $context = 'Debug in Console')
+
+function sanitizeInput($input)
 {
-    ob_start();
-    $output = 'console.info(\'' . $context . ':\');';
-    $output .= 'console.log(' . json_encode($data) . ');';
-    $output = sprintf('<script>%s</script>', $output);
-    echo $output;
+    return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+}
+
+
+function validateInput($input, $maxLength = 255)
+{
+    $input = trim($input);
+    if (strlen($input) > $maxLength) {
+        throw new Exception("Input exceeds maximum length of $maxLength characters.");
+    }
+    if (!preg_match('/^[a-zA-Z0-9\s]+$/', $input)) {
+        throw new Exception("Input contains invalid characters. Only letters, numbers, and spaces are allowed.");
+    }
+    return $input;
+}
+
+
+function executeQuery($pdo, $query, $params)
+{
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
+    return $stmt;
 }
 ?>

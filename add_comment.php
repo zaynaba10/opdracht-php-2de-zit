@@ -3,20 +3,17 @@ session_start();
 require 'config/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $task_id = $_POST['task_id'];
-    $comment = $_POST['comment'];
-
-    if (empty($comment)) {
-        echo 'error: Comment cannot be empty.';
-        exit;
-    }
 
     try {
-        $stmt = $pdo->prepare('INSERT INTO comments (task_id, comment) VALUES (:task_id, :comment)');
-        $stmt->execute(['task_id' => $task_id, 'comment' => $comment]);
-        echo 'success';
+        $task_id = sanitizeInput(validateInput($_POST['task_id']));
+        $comment = sanitizeInput(validateInput($_POST['comment']));
+
+        Comment::create($pdo, $task_id, $comment);
+        header('Location: app.php');
+        exit();
     } catch (Exception $e) {
-        echo 'error: ' . $e->getMessage();
+
+        $_SESSION['error'] = sanitizeInput($e->getMessage());
     }
 }
 ?>
